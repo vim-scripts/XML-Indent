@@ -74,6 +74,7 @@ fun! XmlIndentGet(cur_lnum, use_syntax_check)
       endwhile
       let ind = indent(slnum)
     elseif match(prev_line, '^\s*[a-zA-Z]\S\+=.*>$') == 0
+          \ || match(prev_line, '^\s*".*">$') == 0
       " if prev_line is end of multi-line tag,
       let slnum = prev_lnum
       while indent(slnum) >= ind
@@ -81,6 +82,9 @@ fun! XmlIndentGet(cur_lnum, use_syntax_check)
       endwhile
       if match(prev_line, '/>$') >= 0
         " align to beginning of tag if it's closed.
+        let ind = indent(slnum)
+      elseif match(getline(slnum), '^\s*<!DOCTYPE') == 0
+        " align to beginning of DOCTYPE tag
         let ind = indent(slnum)
       else
         " align to beginning of tag + sw
