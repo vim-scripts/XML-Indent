@@ -66,14 +66,24 @@ fun! XmlIndentGet(cur_lnum, use_syntax_check)
     let xx = match(prev_line, '^\s*<[^ >]\+\s\+\zs\w.*[^>]$')
     if xx >= 0
       let ind =  xx
+    elseif match(prev_line, '-->$') >= 0
+      " if prev_line is end of comment, align to beginning of comment
+      let slnum = prev_lnum
+      while match(getline(slnum), '^\s*<!--') < 0
+        let slnum = slnum - 1
+      endwhile
+      let ind = indent(slnum)
     elseif match(prev_line, '^\s*[a-zA-Z]\S\+=.*>$') == 0
+      " if prev_line is end of multi-line tag,
       let slnum = prev_lnum
       while indent(slnum) >= ind
         let slnum = slnum - 1
       endwhile
       if match(prev_line, '/>$') >= 0
+        " align to beginning of tag if it's closed.
         let ind = indent(slnum)
       else
+        " align to beginning of tag + sw
         let ind = indent(slnum) + &sw
       endif
     else
