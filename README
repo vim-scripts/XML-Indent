@@ -1,0 +1,16 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=1211
+
+It aligns all attributes of a tag to the same column
+
+<!-- there are 10 spaces before "xmlns:c=..." -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page&quot;
+          xmlns:c="http://java.sun.com/jstl/core&quot;
+          xmlns:tf="urn:jsptagdir:/WEB-INF/tags">
+
+<jsp:root
+  xmlns:jsp="http://java.sun.com/JSP/Page&quot;
+  xmlns:c="http://java.sun.com/jstl/core&quot;
+  xmlns:tf="urn:jsptagdir:/WEB-INF/tags">
+
+
+(The original indent/xml.vim does only the second type of indent)
