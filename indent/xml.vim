@@ -66,10 +66,23 @@ fun! XmlIndentGet(cur_lnum, use_syntax_check)
     let xx = match(prev_line, '^\s*<[^ >]\+\s\+\zs\w.*[^>]$')
     if xx >= 0
       let ind =  xx
+    elseif match(prev_line, '^\s*<%--') == 0
+          \ && match(prev_line, '--%>$') == -1
+      let ind = ind + 5
+    elseif match(prev_line, '^\s*<!--') == 0
+          \ && match(prev_line, '-->$') == -1
+      let ind = ind + 5
     elseif match(prev_line, '-->$') >= 0
-      " if prev_line is end of comment, align to beginning of comment
+      " if prev_line is the end of comment, align to the beginning of comment
       let slnum = prev_lnum
       while match(getline(slnum), '^\s*<!--') < 0
+        let slnum = slnum - 1
+      endwhile
+      let ind = indent(slnum)
+    elseif match(prev_line, '--%>$') >= 0
+      " if prev_line is the end of comment, align to the beginning of comment
+      let slnum = prev_lnum
+      while match(getline(slnum), '^\s*<%--') < 0
         let slnum = slnum - 1
       endwhile
       let ind = indent(slnum)
